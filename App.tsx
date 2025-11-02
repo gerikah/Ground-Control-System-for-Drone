@@ -9,6 +9,7 @@ import FlightLogsPanel from './components/FlightLogsPanel';
 import SettingsPanel from './components/SettingsPanel';
 import MissionSetupView from './components/MissionSetupView';
 import GuidePanel from './components/GuidePanel';
+import AboutPanel from './components/AboutPanel';
 
 import { useDashboardData } from './hooks/useDroneSimulation'; 
 import type { Mission, BreedingSiteInfo, MissionPlan, LiveTelemetry } from './types';
@@ -23,7 +24,7 @@ const initialMissions: Mission[] = [
   { id: 'm06', name: 'Mission 6', date: 'Oct 3, 2025', duration: '22 mins', status: 'Completed', location: '428 Sampaloc' },
 ];
 
-type View = 'dashboard' | 'analytics' | 'flightLogs' | 'settings' | 'guide';
+type View = 'dashboard' | 'analytics' | 'flightLogs' | 'settings' | 'guide' | 'about';
 
 const App: React.FC = () => {
   const [isMissionActive, setMissionActive] = useState(false);
@@ -80,6 +81,8 @@ const App: React.FC = () => {
         return <SettingsPanel isDarkMode={isDarkMode} onToggleDarkMode={() => setDarkMode(!isDarkMode)} />;
       case 'guide':
         return <GuidePanel />;
+      case 'about':
+        return <AboutPanel />;
       case 'dashboard':
       default:
         return <DashboardView overviewStats={overviewStats} missions={missions} onMissionSetup={handleOpenMissionSetup} telemetry={liveTelemetry} setArmedState={setArmedState} />;
@@ -92,14 +95,17 @@ const App: React.FC = () => {
     flightLogs: 'Flight Logs',
     settings: 'Settings',
     guide: 'Guide',
+    about: 'About Project',
   };
 
   return (
-    <div className="flex h-screen bg-gcs-background text-gcs-text-dark font-sans dark:bg-gcs-dark dark:text-gcs-text-light">
+    <div className="flex h-screen bg-gcs-background text-gcs-text-dark font-sans dark:bg-gcs-dark dark:text-gcs-text-light overflow-hidden">
       <Sidebar currentView={currentView} onNavigate={setCurrentView} />
-      <main className="flex-1 flex flex-col p-8 overflow-y-auto">
+      <main className="flex-1 flex flex-col p-4 overflow-hidden">
         <DashboardHeader time={time} date={date} title={viewTitles[currentView]} batteryPercentage={liveTelemetry.battery.percentage} />
-        {renderView()}
+        <div className="flex-1 overflow-y-auto min-h-0">
+          {renderView()}
+        </div>
       </main>
       
       {isSetupViewVisible && <MissionSetupView onLaunch={handleLaunchMission} onClose={() => setSetupViewVisible(false)} />}

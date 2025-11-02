@@ -24,16 +24,13 @@ const BatteryStatusIcon: React.FC<{ percentage: number }> = ({ percentage }) => 
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ time, date, title, batteryPercentage }) => {
   return (
-    <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-3 pb-3 border-b border-gray-200 dark:border-gray-700">
       <div>
-        <h1 className="text-3xl font-bold text-gcs-text-dark dark:text-white">{title}</h1>
+        <h1 className="text-2xl font-bold text-gcs-text-dark dark:text-white">{title}</h1>
       </div>
-      <div className="flex items-center space-x-4">
-        <BatteryStatusIcon percentage={batteryPercentage} />
-        <div className="text-right">
-          <p className="font-semibold text-lg dark:text-gray-200">{time}</p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{date}</p>
-        </div>
+      <div className="text-right">
+        <p className="font-semibold text-base dark:text-gray-200">{time}</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">{date}</p>
       </div>
     </header>
   );

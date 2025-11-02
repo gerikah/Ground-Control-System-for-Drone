@@ -84,6 +84,16 @@ export const useDashboardData = (isMissionActive: boolean) => {
     let simulationInterval: number | undefined;
     
     if (liveTelemetry.armed) {
+        // Immediately start counting when armed during mission
+        if (isMissionActive) {
+            missionTimeRef.current += 1;
+            const seconds = missionTimeRef.current;
+            setLiveTelemetry(prev => ({
+                ...prev,
+                flightTime: `${Math.floor(seconds / 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`
+            }));
+        }
+        
         simulationInterval = window.setInterval(() => {
             if(isMissionActive) missionTimeRef.current += 1;
             const seconds = missionTimeRef.current;
@@ -122,7 +132,7 @@ export const useDashboardData = (isMissionActive: boolean) => {
                     heading: (prev.heading + (isMissionActive ? 0.5 + (Math.random() - 0.5) : 0)) % 360,
                     verticalSpeed,
                     battery: { voltage: Math.max(12, 12 + (newBatteryLevel/100) * 4.8), percentage: newBatteryLevel },
-                    flightTime: new Date(seconds * 1000).toISOString().substr(14, 5),
+                    flightTime: `${Math.floor(seconds / 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`,
                     distanceFromHome: isMissionActive ? Math.sqrt(Math.pow(seconds * 2, 2) + Math.pow(seconds,2)) : 0,
                     breedingSiteDetected, currentBreedingSite,
                     detectedSites: [...detectedSitesRef.current], gpsTrack: [...gpsTrackRef.current],

@@ -2,12 +2,12 @@ import React from 'react';
 import type { LiveTelemetry } from '../types';
 
 const TelemetryItem: React.FC<{ label: string; value: string | number; unit?: string; icon: React.ReactNode }> = ({ label, value, unit, icon }) => (
-    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-        <div className="flex items-center gap-3">
+    <div className="flex flex-col justify-center p-2 bg-white/5 rounded-lg">
+        <div className="flex items-center gap-2 mb-1">
             <div className="text-gcs-orange">{icon}</div>
-            <span className="text-sm text-gray-300">{label}</span>
+            <span className="text-xs text-gray-300">{label}</span>
         </div>
-        <span className="font-mono text-white">
+        <span className="font-mono text-sm text-white text-center">
             {value}
             <span className="text-xs ml-1 opacity-70">{unit}</span>
         </span>
@@ -23,29 +23,29 @@ const HomeIcon = () => <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-
 
 const FlightControls: React.FC<{ telemetry: LiveTelemetry }> = ({ telemetry }) => {
     return (
-        <div className="bg-gray-800/50 backdrop-blur-md p-5 rounded-2xl border border-white/10 flex flex-col gap-4">
+        <div className="bg-gray-800/50 backdrop-blur-md p-3 rounded-xl border border-white/10 flex flex-col gap-2 flex-1">
             {/* Status Indicators */}
-            <div className="grid grid-cols-2 gap-4 text-center">
-                <div className={`p-3 rounded-lg ${telemetry.armed ? 'bg-green-500/80' : 'bg-red-500/80'}`}>
+            <div className="grid grid-cols-2 gap-2 text-center">
+                <div className={`py-1.5 px-2 rounded-lg ${telemetry.armed ? 'bg-green-500/80' : 'bg-red-500/80'}`}>
                     <p className="text-xs opacity-80">STATUS</p>
-                    <p className="font-bold text-lg">{telemetry.armed ? 'ARMED' : 'DISARMED'}</p>
+                    <p className="font-bold text-xs">{telemetry.armed ? 'ARMED' : 'DISARMED'}</p>
                 </div>
-                <div className="p-3 bg-blue-500/80 rounded-lg">
+                <div className="py-1.5 px-2 bg-blue-500/80 rounded-lg">
                     <p className="text-xs opacity-80">FLIGHT MODE</p>
-                    <p className="font-bold text-lg">{telemetry.flightMode}</p>
+                    <p className="font-bold text-xs">{telemetry.flightMode}</p>
                 </div>
             </div>
 
             {/* Combined Commands & Telemetry */}
-            <div>
-                 <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-3">System Interface</h3>
-                 <div className="grid grid-cols-2 gap-3 mb-4">
-                     <button className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-colors">Take Off</button>
-                     <button className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-colors">Land</button>
-                     <button className="bg-white/10 hover:bg-white/20 p-3 rounded-lg transition-colors">Hold Position</button>
-                     <button className="bg-gcs-orange/80 hover:bg-gcs-orange p-3 rounded-lg transition-colors font-bold">Return to Launch</button>
+            <div className="flex-1 flex flex-col">
+                 <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">System Interface</h3>
+                 <div className="grid grid-cols-2 gap-1.5 mb-2">
+                     <button className="bg-white/10 hover:bg-white/20 py-2 px-2 text-xs rounded-lg transition-colors">Take Off</button>
+                     <button className="bg-white/10 hover:bg-white/20 py-2 px-2 text-xs rounded-lg transition-colors">Land</button>
+                     <button className="bg-white/10 hover:bg-white/20 py-2 px-2 text-xs rounded-lg transition-colors">Hold Position</button>
+                     <button className="bg-gcs-orange/80 hover:bg-gcs-orange py-2 px-2 text-xs rounded-lg transition-colors font-bold">Return to Launch</button>
                  </div>
-                 <div className="grid grid-cols-2 gap-2">
+                 <div className="grid grid-cols-2 gap-1.5 flex-1">
                     <TelemetryItem label="Signal Strength" value={telemetry.signalStrength} unit="dBm" icon={<SignalIcon />} />
                     <TelemetryItem label="Battery" value={`${telemetry.battery.percentage.toFixed(1)}%`} unit={`${telemetry.battery.voltage.toFixed(1)}V`} icon={<BatteryIcon />} />
                     <TelemetryItem label="Satellites" value={telemetry.satellites} icon={<SatelliteIcon />} />

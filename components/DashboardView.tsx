@@ -45,25 +45,25 @@ const DashboardView: React.FC<DashboardViewProps> = ({ overviewStats: rawStats, 
     const overviewStats: OverviewStat[] = rawStats.map(stat => ({ ...stat, icon: icons[stat.id] || <div /> }));
 
     return (
-        <>
-            <div className="mt-8">
-                <h2 className="text-2xl font-bold text-gcs-text-dark dark:text-white">Overview</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-4">
+        <div className="flex flex-col h-full">
+            <div className="flex-shrink-0">
+                <h2 className="text-lg font-bold text-gcs-text-dark dark:text-white">Overview</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 mt-2">
                     {overviewStats.map(stat => (
                         <OverviewCard key={stat.id} {...stat} />
                     ))}
                 </div>
             </div>
 
-            <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8 flex-grow">
-                <div className="lg:col-span-2">
+            <div className="mt-3 grid grid-cols-1 lg:grid-cols-3 gap-3 flex-1 min-h-0">
+                <div className="lg:col-span-2 min-h-0">
                     <MissionHistory missions={missions} />
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col min-h-0">
                     <PreFlightPanel onMissionSetup={onMissionSetup} telemetry={telemetry} setArmedState={setArmedState} />
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

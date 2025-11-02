@@ -2,16 +2,7 @@ import React from 'react';
 
 const Logo = () => (
     <div className="w-24 h-24 mx-auto mb-2">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="48" fill="#111827" stroke="#F97316" strokeWidth="2.5" />
-            <g fill="#F97316" stroke="none">
-                <path d="M49.5 24 a4,4 0 1,1 0.1,0.1 M47,29 l-13,-4 a1,1 0 0,0 0,2 l13,4 M53,29 l13,-4 a1,1 0 0,1 0,2 l-13,4 M47,35 l-13,4 a1,1 0 0,0 0,-2 l13,-4 M53,35 l13,4 a1,1 0 0,1 0,-2 l-13,-4 M34,23 h-2 v6 h2 z M68,23 h-2 v6 h2 z M34,39 h-2 v-6 h2 z M68,39 h-2 v-6 h2 z" />
-                <path d="M50,47 a2.5,2.5 0 1,0 0,5 a2.5,2.5 0 1,0 0,-5 M50,52 a2.5,8 0 0,0 0,10 a2.5,8 0 0,0 0,-10 M40,51 l-10,-2 a1,1 0 0,0 0,2 l10,2 M60,51 l10,-2 a1,1 0 0,1 0,2 l-10,2 M48,60 l-8,6 M52,60 l8,6 M48,63 l-7,4 M52,63 l7,4 M48,66 l-6,2 M52,66 l6,2" />
-                <path d="M50,70 a5,5 0 0,1 -5,5 c0,5 5,7 5,7 s5,-2 5,-7 a5,5 0 0,1 -5,-5 z" />
-                <path d="M30,82 q10,-8 20,0 t20,0" stroke="#F97316" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-                <path d="M25,88 q10,-8 20,0 t20,0 t20,0" stroke="#F97316" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
-            </g>
-        </svg>
+        <img src="/logo.png?v=1" alt="Mosquito Control Drone Logo" className="w-full h-full object-contain" />
     </div>
 );
 const DashboardIcon = () => <svg className="w-6 h-6 mr-3" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>;
@@ -21,7 +12,7 @@ const SettingsIcon = () => <svg className="w-6 h-6 mr-3" viewBox="0 0 24 24" fil
 const GuideIcon = () => <svg className="w-6 h-6 mr-3" viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h12v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>;
 const AboutIcon = () => <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" ></path></svg>;
 
-type View = 'dashboard' | 'analytics' | 'flightLogs' | 'settings' | 'guide';
+type View = 'dashboard' | 'analytics' | 'flightLogs' | 'settings' | 'guide' | 'about';
 
 interface NavItemProps {
     icon: React.ReactNode;
@@ -58,10 +49,10 @@ const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => {
         <NavItem icon={<GuideIcon />} label="Guide" view="guide" active={currentView === 'guide'} onClick={() => onNavigate('guide')} />
       </nav>
       <div className="mt-auto">
-        <a href="#" className="flex items-center justify-center text-gray-400 hover:text-gcs-orange hover:underline">
+        <button onClick={() => onNavigate('about')} className={`flex w-full items-center justify-center px-4 py-2 rounded-lg transition-colors duration-200 ${currentView === 'about' ? 'text-gcs-orange font-semibold' : 'text-gray-400 hover:text-gcs-orange'}`}>
           <AboutIcon />
           <span>About Project</span>
-        </a>
+        </button>
       </div>
     </aside>
   );

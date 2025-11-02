@@ -121,10 +121,10 @@ const AltitudeTape: React.FC<{ altitude: number }> = ({ altitude }) => {
 
 const FlightInstruments: React.FC<{ telemetry: LiveTelemetry }> = ({ telemetry }) => {
     return (
-        <div className="bg-gray-800/50 backdrop-blur-md p-5 rounded-2xl border border-white/10 flex flex-col gap-5">
-             <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-2 text-center">Instruments</h3>
-             <div className="flex gap-4 justify-center py-2 flex-grow items-center">
-                <div className="grid grid-cols-2 gap-4">
+        <div className="bg-gray-800/50 backdrop-blur-md p-3 rounded-xl border border-white/10 flex flex-col gap-2">
+             <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 text-center">Instruments</h3>
+             <div className="flex gap-2 justify-center items-center">
+                <div className="grid grid-cols-2 gap-2">
                     <Speedometer speed={telemetry.speed} />
                     <AttitudeIndicatorGauge roll={telemetry.roll} pitch={telemetry.pitch} />
                     <HeadingIndicator heading={telemetry.heading} />
@@ -156,36 +156,36 @@ const LiveMissionView: React.FC<LiveMissionViewProps> = ({ telemetry, onEndMissi
   const [isConfirmingEndMission, setConfirmingEndMission] = useState(false);
   
   return (
-    <div className="fixed inset-0 bg-gcs-dark bg-opacity-95 backdrop-blur-sm z-50 flex flex-col p-6 text-gcs-text-light font-sans animate-fade-in">
-      <header className="flex justify-between items-center pb-4 border-b border-gray-700">
-        <h1 className="text-2xl font-bold text-white">Live Mission: <span className="text-gcs-orange">Sector 7G</span></h1>
-        <div className="flex items-center gap-6">
+    <div className="fixed inset-0 bg-gcs-dark bg-opacity-95 backdrop-blur-sm z-50 flex flex-col p-3 text-gcs-text-light font-sans animate-fade-in">
+      <header className="flex justify-between items-center pb-2 border-b border-gray-700">
+        <h1 className="text-lg font-bold text-white">Live Mission: <span className="text-gcs-orange">Sector 7G</span></h1>
+        <div className="flex items-center gap-3">
             <div className="text-center">
                 <p className="text-xs text-gray-400">MISSION TIME</p>
-                <p className="text-lg font-mono tracking-widest">{telemetry.flightTime}</p>
+                <p className="text-sm font-mono tracking-widest">{telemetry.flightTime}</p>
             </div>
-            <button onClick={() => setConfirmingEndMission(true)} className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">
+            <button onClick={() => setConfirmingEndMission(true)} className="bg-red-600 hover:bg-red-700 text-white font-bold py-1.5 px-3 text-xs rounded-lg transition-colors duration-200">
                 End Mission
             </button>
         </div>
       </header>
       
-      <main className="flex-1 flex gap-6 mt-6 overflow-hidden">
+      <main className="flex-1 flex gap-3 mt-3 overflow-hidden min-h-0">
         {/* Left Column: Camera Feed */}
-        <div className="w-3/5 flex flex-col gap-4">
-            <div className="flex-1 bg-black rounded-2xl overflow-hidden relative">
+        <div className="w-2/3 flex flex-col gap-2 min-h-0">
+            <div className="flex-1 bg-black rounded-xl overflow-hidden relative min-h-0">
                 <CameraFeed telemetry={telemetry} />
             </div>
             {telemetry.breedingSiteDetected && telemetry.currentBreedingSite && (
-                <div className="bg-yellow-400/80 border border-yellow-600 text-yellow-900 px-4 py-3 rounded-lg flex items-center gap-3 animate-pulse">
+                <div className="bg-yellow-400/80 border border-yellow-600 text-yellow-900 px-2 py-1.5 rounded-lg flex items-center gap-2 animate-pulse">
                     <AlertIcon />
-                    <span className="font-bold">Alert:</span> Potential Site Detected - {telemetry.currentBreedingSite.type} ({telemetry.currentBreedingSite.object}).
+                    <span className="font-bold text-xs">Alert:</span> <span className="text-xs">Potential Site Detected - {telemetry.currentBreedingSite.type} ({telemetry.currentBreedingSite.object}).</span>
                 </div>
             )}
         </div>
         
         {/* Right Column: Instruments & Controls */}
-        <div className="w-2/5 flex flex-col gap-6 overflow-y-auto">
+        <div className="w-1/3 flex flex-col gap-3 overflow-hidden min-h-0">
             <FlightInstruments telemetry={telemetry} />
             <FlightControls telemetry={telemetry} />
         </div>
@@ -193,19 +193,19 @@ const LiveMissionView: React.FC<LiveMissionViewProps> = ({ telemetry, onEndMissi
 
       {isConfirmingEndMission && (
         <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-60" aria-modal="true" role="dialog">
-            <div className="bg-gray-800 p-8 rounded-2xl shadow-2xl border border-white/10 max-w-sm text-center animate-dialog-in">
-                <h2 className="text-xl font-bold text-white mb-3">Confirm End Mission</h2>
-                <p className="text-gray-300 mb-6">Are you sure you want to end the current mission?</p>
-                <div className="flex justify-center gap-4">
+            <div className="bg-gray-800 p-6 rounded-xl shadow-2xl border border-white/10 max-w-sm text-center animate-dialog-in">
+                <h2 className="text-lg font-bold text-white mb-2">Confirm End Mission</h2>
+                <p className="text-sm text-gray-300 mb-4">Are you sure you want to end the current mission?</p>
+                <div className="flex justify-center gap-3">
                     <button 
                         onClick={() => setConfirmingEndMission(false)} 
-                        className="px-8 py-3 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-lg transition-colors"
+                        className="px-6 py-2 text-sm bg-white/20 hover:bg-white/30 text-white font-semibold rounded-lg transition-colors"
                     >
                         Cancel
                     </button>
                     <button 
                         onClick={() => onEndMission(telemetry.flightTime, telemetry.gpsTrack, telemetry.detectedSites)} 
-                        className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-colors"
+                        className="px-6 py-2 text-sm bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-colors"
                     >
                         Confirm
                     </button>

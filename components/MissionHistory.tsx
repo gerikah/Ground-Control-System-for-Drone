@@ -40,7 +40,7 @@ const MiniMapView: React.FC<{ track: { lat: number; lon: number }[] | undefined 
     );
 
     return (
-        <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0">
+        <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center flex-shrink-0">
             {points ? (
                 <svg viewBox="0 0 100 100" className="w-full h-full p-1">
                     <path d={points} fill="none" stroke="#F97316" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" />
@@ -54,34 +54,34 @@ const MiniMapView: React.FC<{ track: { lat: number; lon: number }[] | undefined 
 
 
 const MissionHistory: React.FC<MissionHistoryProps> = ({ missions }) => {
-    const recentMissions = missions.slice(0, 4);
+    const recentMissions = missions.slice(0, 5);
 
     return (
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm h-full flex flex-col">
-            <h3 className="text-xl font-bold text-gcs-text-dark dark:text-white mb-4">Recent Mission Logs</h3>
-            <div className="flex-grow overflow-y-auto pr-2 -mr-2 space-y-3">
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm h-full flex flex-col">
+            <h3 className="text-base font-bold text-gcs-text-dark dark:text-white mb-3">Recent Mission Logs</h3>
+            <div className="flex-grow overflow-y-auto pr-2 -mr-2 space-y-2">
                 {recentMissions.length > 0 ? recentMissions.map(mission => (
-                    <div key={mission.id} className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-100/70 dark:hover:bg-gray-700/50 transition-colors">
+                    <div key={mission.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100/70 dark:hover:bg-gray-700/50 transition-colors">
                         <MiniMapView track={mission.gpsTrack} />
                         <div className="flex-1 grid grid-cols-3 items-center gap-2">
                             <div>
-                                <p className="font-bold text-gcs-text-dark dark:text-gray-200 truncate">{mission.name}</p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">{mission.date}</p>
+                                <p className="font-semibold text-sm text-gcs-text-dark dark:text-gray-200 truncate">{mission.name}</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">{mission.date}</p>
                             </div>
                             <div className="flex justify-center">
-                                <span className={`inline-flex items-center px-3 py-1 text-sm font-semibold rounded-full ${mission.status === 'Completed' ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300' : 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300'}`}>
-                                    <span className={`w-2 h-2 mr-2 rounded-full ${mission.status === 'Completed' ? 'bg-green-500' : 'bg-orange-500'}`}></span>
+                                <span className={`inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full ${mission.status === 'Completed' ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300' : 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300'}`}>
+                                    <span className={`w-1.5 h-1.5 mr-1.5 rounded-full ${mission.status === 'Completed' ? 'bg-green-500' : 'bg-orange-500'}`}></span>
                                     {mission.status}
                                 </span>
                             </div>
                             <div className="text-right">
-                                <p className="font-semibold text-gcs-text-dark dark:text-gray-200">{mission.duration}</p>
+                                <p className="font-semibold text-sm text-gcs-text-dark dark:text-gray-200">{mission.duration}</p>
                             </div>
                         </div>
                     </div>
                 )) : (
                     <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
-                        <p>No mission logs available.</p>
+                        <p className="text-sm">No mission logs available.</p>
                     </div>
                 )}
             </div>

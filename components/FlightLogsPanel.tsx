@@ -296,55 +296,55 @@ ${trackpoints}
     };
 
     return (
-        <div className="mt-8 flex-grow flex gap-6 animate-fade-in h-[calc(100%-100px)]">
-            <div className="w-1/3 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm flex flex-col">
-                <h2 className="text-xl font-bold mb-4 px-2 dark:text-white">Mission History</h2>
-                <div className="px-2 mb-4">
+        <div className="flex-grow flex gap-4 animate-fade-in h-full">
+            <div className="w-1/3 bg-white dark:bg-gray-800 p-3 rounded-xl shadow-sm flex flex-col min-h-0">
+                <h2 className="text-base font-bold mb-3 px-2 dark:text-white">Mission History</h2>
+                <div className="px-2 mb-3">
                     <div className="relative">
                         <input 
                             type="text" 
                             placeholder="Search missions..." 
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gcs-orange dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+                            className="w-full pl-9 pr-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gcs-orange dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
                         />
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2">
+                        <div className="absolute left-2.5 top-1/2 -translate-y-1/2">
                             <SearchIcon />
                         </div>
                     </div>
                     <div className="mt-2 flex items-center">
-                        <button onClick={() => setShowFilters(!showFilters)} className="flex items-center gap-2 text-sm text-gray-600 hover:text-gcs-orange dark:text-gray-400 dark:hover:text-gcs-orange">
+                        <button onClick={() => setShowFilters(!showFilters)} className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gcs-orange dark:text-gray-400 dark:hover:text-gcs-orange">
                            <FilterIcon /> 
                            <span>{showFilters ? 'Hide' : 'Show'} Filters</span>
-                           {filtersAreActive && <span className="w-2 h-2 bg-gcs-orange rounded-full ml-1 animate-pulse"></span>}
+                           {filtersAreActive && <span className="w-1.5 h-1.5 bg-gcs-orange rounded-full ml-1 animate-pulse"></span>}
                         </button>
                         <div
-                            className="relative inline-block ml-4"
+                            className="relative inline-block ml-3"
                             onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) { setShowExportOptions(false); }}}
                         >
-                            <button onClick={() => setShowExportOptions(prev => !prev)} className="flex items-center gap-2 text-sm text-gray-600 hover:text-gcs-orange dark:text-gray-400 dark:hover:text-gcs-orange">
+                            <button onClick={() => setShowExportOptions(prev => !prev)} className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gcs-orange dark:text-gray-400 dark:hover:text-gcs-orange">
                                 <ExportIcon />
                                 <span>Export Logs</span>
                             </button>
                             {showExportOptions && (
-                                <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 border dark:border-gray-600 animate-fade-in-sm">
-                                    <ul className="py-1 text-sm text-gray-700 dark:text-gray-200">
-                                        <li><button onClick={() => handleExport('last10')} className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Last 10 Missions</button></li>
-                                        <li><button onClick={() => handleExport('last20')} className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Last 20 Missions</button></li>
+                                <div className="absolute left-0 mt-2 w-44 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 border dark:border-gray-600 animate-fade-in-sm">
+                                    <ul className="py-1 text-xs text-gray-700 dark:text-gray-200">
+                                        <li><button onClick={() => handleExport('last10')} className="block w-full text-left px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-600">Last 10 Missions</button></li>
+                                        <li><button onClick={() => handleExport('last20')} className="block w-full text-left px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-600">Last 20 Missions</button></li>
                                         <li><hr className="my-1 dark:border-gray-600" /></li>
-                                        <li><button onClick={() => handleExport('last7days')} className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Last 7 Days</button></li>
-                                        <li><button onClick={() => handleExport('last30days')} className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">Last 30 Days</button></li>
+                                        <li><button onClick={() => handleExport('last7days')} className="block w-full text-left px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-600">Last 7 Days</button></li>
+                                        <li><button onClick={() => handleExport('last30days')} className="block w-full text-left px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-600">Last 30 Days</button></li>
                                         <li><hr className="my-1 dark:border-gray-600" /></li>
-                                        <li><button onClick={() => handleExport('all')} className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600">All Missions</button></li>
+                                        <li><button onClick={() => handleExport('all')} className="block w-full text-left px-3 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-600">All Missions</button></li>
                                     </ul>
                                 </div>
                             )}
                         </div>
                     </div>
                      {showFilters && (
-                        <div className="mt-3 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border dark:border-gray-600 animate-fade-in-sm">
-                            <div className="flex justify-between items-center mb-3">
-                                <h4 className="font-bold text-sm text-gray-800 dark:text-gray-200">Filter Options</h4>
+                        <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border dark:border-gray-600 animate-fade-in-sm">
+                            <div className="flex justify-between items-center mb-2">
+                                <h4 className="font-bold text-xs text-gray-800 dark:text-gray-200">Filter Options</h4>
                                 {filtersAreActive && (
                                     <button 
                                         onClick={handleClearFilters} 
@@ -354,11 +354,11 @@ ${trackpoints}
                                     </button>
                                 )}
                             </div>
-                            <div className="mb-4">
-                                <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-2">Status</label>
-                                <div className="flex flex-wrap gap-2">
+                            <div className="mb-3">
+                                <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1.5">Status</label>
+                                <div className="flex flex-wrap gap-1.5">
                                     {(['All', 'Completed', 'Interrupted'] as const).map(status => (
-                                         <button key={status} onClick={() => setStatusFilter(status)} className={`px-3 py-1 text-xs rounded-full transition-colors ${statusFilter === status ? 'bg-gcs-orange text-white font-bold' : 'bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500'}`}>
+                                         <button key={status} onClick={() => setStatusFilter(status)} className={`px-2.5 py-0.5 text-xs rounded-full transition-colors ${statusFilter === status ? 'bg-gcs-orange text-white font-bold' : 'bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500'}`}>
                                             {status}
                                         </button>
                                     ))}
@@ -366,7 +366,7 @@ ${trackpoints}
                             </div>
                              <div>
                                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Breeding Sites</label>
-                                 <select onChange={(e) => setBreedingSiteFilter(e.target.value as any)} value={breedingSiteFilter} className="w-full p-2 border bg-white border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-gcs-orange dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                                 <select onChange={(e) => setBreedingSiteFilter(e.target.value as any)} value={breedingSiteFilter} className="w-full p-1.5 border bg-white border-gray-300 rounded-md text-xs focus:outline-none focus:ring-1 focus:ring-gcs-orange dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                                      <option value="All">All Missions</option>
                                      <option value="Has Detections">Has Detections</option>
                                      <option value="No Detections">No Detections</option>
@@ -376,20 +376,20 @@ ${trackpoints}
                     )}
                 </div>
                 
-                <div className="overflow-y-auto space-y-2 pr-2 flex-grow">
+                <div className="overflow-y-auto space-y-1.5 pr-2 flex-grow min-h-0">
                     {filteredMissions.map(mission => (
                         <button key={mission.id} 
                             onClick={() => setSelectedMission(mission)}
-                            className={`w-full text-left p-4 rounded-lg transition-colors ${selectedMission?.id === mission.id ? 'bg-gcs-orange/10 text-gcs-orange' : 'hover:bg-gray-100 dark:hover:bg-gray-700/50'}`}
+                            className={`w-full text-left p-3 rounded-lg transition-colors ${selectedMission?.id === mission.id ? 'bg-gcs-orange/10 text-gcs-orange' : 'hover:bg-gray-100 dark:hover:bg-gray-700/50'}`}
                         >
-                            <p className="font-bold dark:text-gray-200">{mission.name}</p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">{mission.date} - {mission.duration}</p>
-                            <p className={`text-xs font-semibold mt-1 ${mission.status === 'Completed' ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}`}>{mission.status}</p>
+                            <p className="font-bold text-sm dark:text-gray-200">{mission.name}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{mission.date} - {mission.duration}</p>
+                            <p className={`text-xs font-semibold mt-0.5 ${mission.status === 'Completed' ? 'text-green-600 dark:text-green-400' : 'text-orange-600 dark:text-orange-400'}`}>{mission.status}</p>
                         </button>
                     ))}
                      {filteredMissions.length === 0 && (
-                        <div className="text-center py-10 text-gray-500 dark:text-gray-400">
-                            <p>No missions found.</p>
+                        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                            <p className="text-sm">No missions found.</p>
                             <p className="text-xs">Try adjusting your search or filters.</p>
                         </div>
                     )}
@@ -397,22 +397,22 @@ ${trackpoints}
             </div>
 
             {/* Mission Details */}
-            <div className="flex-1 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm flex flex-col">
+            <div className="flex-1 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm flex flex-col min-h-0">
                  {selectedMission ? (
                     <>
-                        <h2 className="text-2xl font-bold mb-1 dark:text-white">{selectedMission.name} Details</h2>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{selectedMission.date}</p>
+                        <h2 className="text-xl font-bold mb-0.5 dark:text-white">{selectedMission.name} Details</h2>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{selectedMission.date}</p>
                         <div className="flex-grow min-h-0">
                              <MapView track={selectedMission.gpsTrack || []} />
                         </div>
 
                         {selectedMission.detectedSites && selectedMission.detectedSites.length > 0 && (
-                            <div className="mt-4 pt-4 border-t dark:border-gray-700">
-                                <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-2">Detected Breeding Sites</h3>
-                                <div className="space-y-2 max-h-24 overflow-y-auto bg-gray-50 dark:bg-gray-700/50 p-3 rounded-md border dark:border-gray-600">
+                            <div className="mt-3 pt-3 border-t dark:border-gray-700">
+                                <h3 className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-2">Detected Breeding Sites</h3>
+                                <div className="space-y-1.5 max-h-20 overflow-y-auto bg-gray-50 dark:bg-gray-700/50 p-2 rounded-md border dark:border-gray-600">
                                     {selectedMission.detectedSites.map((site, index) => (
-                                        <div key={index} className="text-sm dark:text-gray-200">
-                                            <span className={`font-semibold px-2 py-0.5 rounded-full text-xs mr-2 ${site.type === 'Open' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300' : 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300'}`}>{site.type}</span> 
+                                        <div key={index} className="text-xs dark:text-gray-200">
+                                            <span className={`font-semibold px-1.5 py-0.5 rounded-full text-xs mr-1.5 ${site.type === 'Open' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300' : 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300'}`}>{site.type}</span> 
                                             {site.object}
                                         </div>
                                     ))}
@@ -420,15 +420,15 @@ ${trackpoints}
                             </div>
                         )}
 
-                        <div className="grid grid-cols-4 gap-4 pt-4 mt-4 border-t dark:border-gray-700 items-center">
-                            <div><p className="text-xs text-gray-500 dark:text-gray-400">Status</p><p className="font-semibold dark:text-white">{selectedMission.status}</p></div>
-                            <div><p className="text-xs text-gray-500 dark:text-gray-400">Duration</p><p className="font-semibold dark:text-white">{selectedMission.duration}</p></div>
-                            <div><p className="text-xs text-gray-500 dark:text-gray-400">Location</p><p className="font-semibold dark:text-white">{selectedMission.location}</p></div>
+                        <div className="grid grid-cols-4 gap-3 pt-3 mt-3 border-t dark:border-gray-700 items-center">
+                            <div><p className="text-xs text-gray-500 dark:text-gray-400">Status</p><p className="font-semibold text-sm dark:text-white">{selectedMission.status}</p></div>
+                            <div><p className="text-xs text-gray-500 dark:text-gray-400">Duration</p><p className="font-semibold text-sm dark:text-white">{selectedMission.duration}</p></div>
+                            <div><p className="text-xs text-gray-500 dark:text-gray-400">Location</p><p className="font-semibold text-sm dark:text-white">{selectedMission.location}</p></div>
                              <div>
                                 <button 
                                     onClick={handleDownloadGpx}
                                     disabled={!selectedMission.gpsTrack || selectedMission.gpsTrack.length === 0}
-                                    className="w-full bg-gcs-orange text-white font-bold py-2 px-4 rounded-lg transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed">
+                                    className="w-full bg-gcs-orange text-white font-bold text-sm py-1.5 px-3 rounded-lg transition-opacity hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed">
                                     Download Track
                                 </button>
                             </div>
@@ -436,7 +436,7 @@ ${trackpoints}
                     </>
                  ) : (
                     <div className="flex items-center justify-center h-full">
-                        <p className="text-gray-500 dark:text-gray-400">Select a mission to view details or adjust your search filters.</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Select a mission to view details or adjust your search filters.</p>
                     </div>
                  )}
             </div>
