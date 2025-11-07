@@ -26,7 +26,18 @@ const MissionSetupView: React.FC<MissionSetupViewProps> = ({ onLaunch, onClose }
         { id: 'gps', text: 'GPS Lock Acquired', checked: false },
         { id: 'weather', text: 'Weather Conditions Checked', checked: false },
     ]);
+    const [preArmingChecks, setPreArmingChecks] = useState([
+        { id: 'leveled', text: 'UAV is Levelled', checked: false, status: 'checking' },
+        { id: 'calibration', text: 'Run-time Calibration', checked: false, status: 'checking' },
+        { id: 'cpu', text: 'CPU Load', checked: false, status: 'checking' },
+        { id: 'navigation', text: 'Navigation is Safe', checked: false, status: 'checking' },
+        { id: 'compass', text: 'Compass Calibrated', checked: false, status: 'checking' },
+        { id: 'accelerometer', text: 'Accelerometer Calibrated', checked: false, status: 'checking' },
+        { id: 'settings', text: 'Settings Validated', checked: false, status: 'checking' },
+        { id: 'hardware', text: 'Hardware Health', checked: false, status: 'checking' },
+    ]);
     const [isLoadModalOpen, setLoadModalOpen] = useState(false);
+    const [showPreArmingChecks, setShowPreArmingChecks] = useState(false);
     
     const [history, setHistory] = useState<({ lat: number; lon: number }[])[]>([[]]);
     const [historyIndex, setHistoryIndex] = useState(0);
@@ -36,6 +47,8 @@ const MissionSetupView: React.FC<MissionSetupViewProps> = ({ onLaunch, onClose }
 
     const mapContainerRef = useRef<HTMLDivElement>(null);
     const isChecklistComplete = useMemo(() => checklist.every(item => item.checked), [checklist]);
+    const isPreArmingComplete = useMemo(() => preArmingChecks.every(item => item.checked), [preArmingChecks]);
+    const canLaunch = isChecklistComplete && isPreArmingComplete && waypoints.length >= 2;
 
     const updateWaypoints = (newWaypoints: { lat: number; lon: number }[]) => {
         const newHistory = history.slice(0, historyIndex + 1);
@@ -99,6 +112,31 @@ const MissionSetupView: React.FC<MissionSetupViewProps> = ({ onLaunch, onClose }
     
     const handleCheckAll = () => {
         setChecklist(prev => prev.map(item => ({ ...item, checked: true })));
+    };
+
+    const handleRunPreArmingChecks = () => {
+        setShowPreArmingChecks(true);
+        // Simulate pre-arming checks with delays
+        const checkOrder = [
+            { id: 'leveled', delay: 500 },
+            { id: 'calibration', delay: 1000 },
+            { id: 'cpu', delay: 1500 },
+            { id: 'navigation', delay: 2000 },
+            { id: 'compass', delay: 2500 },
+            { id: 'accelerometer', delay: 3000 },
+            { id: 'settings', delay: 3500 },
+            { id: 'hardware', delay: 4000 },
+        ];
+
+        checkOrder.forEach(({ id, delay }) => {
+            setTimeout(() => {
+                setPreArmingChecks(prev => prev.map(check => 
+                    check.id === id 
+                        ? { ...check, status: 'passed', checked: true }
+                        : check
+                ));
+            }, delay);
+        });
     };
 
     const handleLaunchClick = () => {
@@ -201,51 +239,82 @@ const MissionSetupView: React.FC<MissionSetupViewProps> = ({ onLaunch, onClose }
                         </div>
                     </div>
 
-                    <aside className="flex-1 flex flex-col gap-3 bg-gray-800/50 p-4 rounded-xl border border-white/10 overflow-y-auto min-h-0">
-                        <div>
-                            <label htmlFor="missionName" className="block text-sm font-bold mb-1.5">Mission Name</label>
-                            <input id="missionName" type="text" value={missionName} onChange={(e) => setMissionName(e.target.value)} className="w-full bg-gray-900/80 p-2 text-sm rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gcs-orange" />
+                    <aside className="flex-1 flex flex-col bg-gray-800/50 p-3 rounded-xl border border-white/10 min-h-0">
+                        <div className="mb-2">
+                            <label htmlFor="missionName" className="block text-base font-bold mb-1">Mission Name</label>
+                            <input id="missionName" type="text" value={missionName} onChange={(e) => setMissionName(e.target.value)} className="w-full bg-gray-900/80 p-1.5 text-sm rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-gcs-orange" />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-bold mb-1.5">Mission Parameters</label>
-                            <div className="space-y-2 bg-gray-900/50 p-3 rounded-lg border border-gray-700">
-                                <div>
-                                    <div className="flex justify-between text-sm mb-1"><span>Altitude</span><span className="font-mono">{altitude} m</span></div>
-                                    <input type="range" min="10" max="120" value={altitude} onChange={(e) => setAltitude(Number(e.target.value))} className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer range-thumb" />
-                                </div>
-                                <div>
-                                    <div className="flex justify-between text-sm mb-1"><span>Speed</span><span className="font-mono">{speed} m/s</span></div>
-                                    <input type="range" min="1" max="25" value={speed} onChange={(e) => setSpeed(Number(e.target.value))} className="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer range-thumb" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex-grow flex flex-col min-h-0">
-                             <div className="flex justify-between items-center mb-1.5">
-                                <label className="block text-sm font-bold">Pre-flight Checklist</label>
-                                <button onClick={handleCheckAll} className="text-sm text-blue-400 hover:text-blue-300 font-semibold hover:underline">
+                        <div className="flex flex-col mb-2">
+                             <div className="flex justify-between items-center mb-1">
+                                <label className="block text-base font-bold">Pre-flight Checklist</label>
+                                <button onClick={handleCheckAll} className="text-xs text-blue-400 hover:text-blue-300 font-semibold hover:underline">
                                     Check All
                                 </button>
                             </div>
-                            <div className="bg-gray-900/50 border border-gray-700 p-3 rounded-lg space-y-2.5 flex-grow overflow-y-auto">
+                            <div className="bg-gray-900/50 border border-gray-700 p-2 rounded-lg space-y-1.5">
                                 {checklist.map(item => (
-                                    <label key={item.id} className="flex items-center gap-2.5 cursor-pointer">
-                                        <input type="checkbox" checked={item.checked} onChange={() => handleChecklistItemToggle(item.id)} className="w-4 h-4 rounded bg-gray-600 border-gray-500 text-gcs-orange focus:ring-gcs-orange flex-shrink-0" />
-                                        <span className={`text-sm ${item.checked ? 'text-gray-500 line-through' : 'text-gcs-text-light'}`}>{item.text}</span>
+                                    <label key={item.id} className="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox" checked={item.checked} onChange={() => handleChecklistItemToggle(item.id)} className="w-3.5 h-3.5 rounded bg-gray-600 border-gray-500 text-gcs-orange focus:ring-gcs-orange flex-shrink-0" />
+                                        <span className={`text-sm leading-tight ${item.checked ? 'text-gray-500 line-through' : 'text-gcs-text-light'}`}>{item.text}</span>
                                     </label>
                                 ))}
                             </div>
                         </div>
+
+                        <div className="flex-grow flex flex-col mb-2">
+                            <div className="flex justify-between items-center mb-1">
+                                <label className="block text-base font-bold">Pre-arming Checks</label>
+                                {!showPreArmingChecks && isChecklistComplete && (
+                                    <button 
+                                        onClick={handleRunPreArmingChecks} 
+                                        className="text-xs bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded transition-colors"
+                                    >
+                                        Run Checks
+                                    </button>
+                                )}
+                            </div>
+                            {!showPreArmingChecks ? (
+                                <div className="bg-gray-900/50 border border-gray-700 p-3 rounded-lg flex items-center justify-center flex-grow text-center text-sm text-gray-400">
+                                    Complete pre-flight checklist to run pre-arming checks
+                                </div>
+                            ) : (
+                                <div className="bg-gray-900/50 border border-gray-700 p-2 rounded-lg flex-grow flex flex-col">
+                                    <div className="space-y-1.5 flex-grow">
+                                        {preArmingChecks.map(check => (
+                                            <div key={check.id} className="flex items-center gap-2">
+                                                {check.status === 'checking' && (
+                                                    <svg className="w-3.5 h-3.5 text-yellow-500 animate-spin flex-shrink-0" fill="none" viewBox="0 0 24 24">
+                                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                    </svg>
+                                                )}
+                                                {check.status === 'passed' && (
+                                                    <svg className="w-3.5 h-3.5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                                                    </svg>
+                                                )}
+                                                <span className={`text-sm leading-tight ${check.checked ? 'text-green-400' : 'text-gray-400'}`}>
+                                                    {check.text}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="text-xs text-red-400 mt-2 text-center">
+                                        Arming is only allowed once all statuses have been checked.
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                         
-                        <div className="grid grid-cols-2 gap-2 pt-3 border-t border-gray-700 mt-auto">
-                            <button onClick={() => setLoadModalOpen(true)} className="w-full text-white font-bold py-2 px-3 text-sm rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors">Load Plan</button>
-                            <button onClick={handleSavePlan} className="w-full text-white font-bold py-2 px-3 text-sm rounded-lg bg-green-600 hover:bg-green-700 transition-colors">Save Plan</button>
-                            <button onClick={onClose} className="w-full text-white font-bold py-2 px-3 text-sm rounded-lg bg-white/20 hover:bg-white/30 transition-colors">Cancel</button>
+                        <div className="grid grid-cols-2 gap-2 pt-2 border-t border-gray-700 mt-auto">
+                            <button onClick={() => setLoadModalOpen(true)} className="w-full text-white font-bold py-2.5 px-3 text-sm rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors">Load Plan</button>
+                            <button onClick={handleSavePlan} className="w-full text-white font-bold py-2.5 px-3 text-sm rounded-lg bg-green-600 hover:bg-green-700 transition-colors">Save Plan</button>
+                            <button onClick={onClose} className="w-full text-white font-bold py-2.5 px-3 text-sm rounded-lg bg-white/20 hover:bg-white/30 transition-colors">Cancel</button>
                             <button 
                                 onClick={handleLaunchClick}
                                 disabled={!isChecklistComplete || waypoints.length < 2}
-                                className="w-full text-white font-bold py-2 px-3 text-sm rounded-lg transition-all duration-200 bg-gcs-orange hover:opacity-90 shadow-lg shadow-gcs-orange/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gcs-orange disabled:bg-gray-500 disabled:opacity-70 disabled:cursor-not-allowed disabled:shadow-none"
+                                className="w-full text-white font-bold py-2.5 px-3 text-sm rounded-lg transition-all duration-200 bg-gcs-orange hover:opacity-90 shadow-lg shadow-gcs-orange/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gcs-orange disabled:bg-gray-500 disabled:opacity-70 disabled:cursor-not-allowed disabled:shadow-none"
                             >
                                 Launch Mission
                             </button>
